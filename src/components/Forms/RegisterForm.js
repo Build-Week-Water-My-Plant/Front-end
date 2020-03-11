@@ -10,7 +10,7 @@ const RegisterForm = props => {
 
     const userSignUp = (newUser) =>{
         axios
-            .post("https://nchampag-watermyplants.herokuapp.com/createnewuser", newUser)
+            .post("https://api-watermyplants.herokuapp.com/auth/register", newUser)
             .then(res => {
                 toggleLoading(false);
                 history.push('/login')
@@ -20,12 +20,14 @@ const RegisterForm = props => {
 
     const initialNewUser = {
         username: '',
-        phonenumber: '',
+        firstName: '',
+        lastName:'',
+        phoneNumber: '',
         password: ''
     }
 
     const [ newUser, setNewUser] = useState(initialNewUser);
-    const { username, phonenumber, password } = newUser;
+    const { username, firstName, lastName, phoneNumber, password } = newUser;
 
     // Handler Functions
     const handleInputChange = (e) => {
@@ -36,7 +38,7 @@ const RegisterForm = props => {
     }
 
     const handleFormSubmit = (e) => {    
-        if(username && phonenumber && password) {
+        if(username && phoneNumber && password) {
             e.preventDefault();
             toggleLoading(true);
             userSignUp(newUser);
@@ -58,8 +60,17 @@ const RegisterForm = props => {
             </div>
 
             <div className="form-inputs">
-                <label htmlFor="phonenumber">Phone Number</label>
-                <input type='phonenumber' id="phonenumber" name='phonenumber' onChange={handleInputChange} value={phonenumber} placeholder='Phone Number' required/>
+                <label htmlFor="firstName">First Name</label>
+                <input type='text' id="firstName" name='firstName' onChange={handleInputChange} value={firstName} placeholder='First Name' required/>
+            </div>
+            <div className="form-inputs">
+                <label htmlFor="lastName">Last Name</label>
+                <input type='text' id="lastName" name='lastName' onChange={handleInputChange} value={lastName} placeholder='Last Name' required/>
+            </div>
+
+            <div className="form-inputs">
+                <label htmlFor="phoneNumber">Phone Number</label>
+                <input type='phoneNumber' id="phoneNumber" name='phoneNumber' onChange={handleInputChange} value={phoneNumber} placeholder='Phone Number' required/>
             </div>
 
             <div className="form-inputs">

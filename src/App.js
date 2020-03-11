@@ -18,7 +18,7 @@ const App = () => {
   const [ isModalOpen, setModalOpen ] = useState(false); //Modal Toggle
   const [ isAuthenticated, setIsAuthenticated ] = useLocalStorage('isAuthenticated', false); //Is User Authenticated (for private routes)
   const [ currentUser, setCurrentUser ] = useLocalStorage('username', ''); //Current Logged In User
-  const [ currentUserID, setCurrentUserID ] = useState(''); //UserID for current loggedIn user. Used to post requests
+  const [ currentUserID, setCurrentUserID ] = useLocalStorage('userID', ""); //UserID for current loggedIn user. Used to post requests
   const [ token, setToken ] = useLocalStorage('token', ''); //User Token. Set to local storage during log in
   const [ newPlant, setNewPlant ] = useState(null); //Object to detect if a new plant is added and what should happen after
 
@@ -50,9 +50,9 @@ const App = () => {
     });
   }
 
-  const addPlant = ( newPlantObj ) => {
+  const addPlant = ( newPlant ) => {
     axiosWithAuth()
-      .post("plants/plant", newPlantObj)
+      .post("api/plants", newPlant)
       .then(res => {
         setNewPlant(res.data);
         toggleLoading(false);
@@ -61,32 +61,33 @@ const App = () => {
       .catch(err => notify('Unsuccessful! Try Again', 'error'))
   }
 
-  const deletePlant = (plantid, plantObj) => {
+  const deletePlant = (plantid) => {
     toggleLoading(true);
     axiosWithAuth()
-      .delete(`plants/plant/${plantid}`)
+      .delete(`api/plants/${plantid}`)
       .then(res => {
-        setNewPlant(plantObj);
         toggleLoading(false);
         notify('Plant Deleted', 'success')
       })
       .catch(err => notify('Unsuccessful! Try Again', 'error'))
   }
 
-
+  const userID=localStorage.getItem("userID")
+  
   useEffect(() => {
     if(currentUser !== '') {
       axios
-        .get(`https://nchampag-watermyplants.herokuapp.com/getuser/${currentUser}`)
+        .get(`https://api-watermyplants.herokuapp.com/api/users/${userID}/plants`)
         .then(res => {
-          setCurrentUserID(res.data.userid);
-          localStorage.setItem("userid", res.data.userid);
-          setPlants(res.data.plants);
+          setPlants(res.data)
+          console.log(res)
           toggleLoading(false);
         })
         .catch(err => notify('Unsuccessful! Refresh page', 'error'))
     }
   }, [currentUser, newPlant])
+
+
 
   return (   
     <>   

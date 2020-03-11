@@ -8,28 +8,26 @@ const LoginForm = props => {
     const { addCurrentUser, toggleAuthentication, addToken, notify, toggleLoading, history } = props
 
     const initialExistingUser = {
-        loginUsername: '',
-        loginPassword: ''
+        "username": '',
+        "password": ''
     }
 
     const [ existingUser, setExistingUser] = useState(initialExistingUser);
-    const { loginUsername, loginPassword } = existingUser;
+    const { username, password } = existingUser;
+    const [userID, setUserID] = useState("")
+    console.log(existingUser)
 
 
     const userLogIn = (user) => { 
         axios
             .post(
-                "https://nchampag-watermyplants.herokuapp.com/login", 
-                `grant_type=password&username=${user.loginUsername}&password=${user.loginPassword}`,
-                {
-                    headers: {
-                    Authorization: `Basic ${btoa("lambda-client:lambda-secret")}`,
-                    "Content-Type": "application/x-www-form-urlencoded"
-                    }
-                }
+                "https://api-watermyplants.herokuapp.com/auth/login", existingUser
             )
             .then(res => { 
                 addToken(res.data.access_token);
+                console.log(res)
+                localStorage.setItem("userID", res.data.user.id)
+                console.log("current user id:",localStorage.getItem("userID"))
                 toggleLoading(false); 
                 toggleAuthentication();
                 history.push('/');
@@ -49,10 +47,10 @@ const LoginForm = props => {
     }
 
     const handleFormSubmit = (e) => {
-        if(loginUsername && loginPassword) {
+        if(username && password) {
             e.preventDefault();
             toggleLoading(true);
-            addCurrentUser(loginUsername)
+            addCurrentUser(username)
 
             userLogIn(existingUser);
             setExistingUser(initialExistingUser);
@@ -68,12 +66,12 @@ const LoginForm = props => {
 
             <div className="form-inputs">
                 <label htmlFor="username">Username</label>
-                <input type='text' id="loginUsername" name='username' onChange={handleInputChange} value={loginUsername} placeholder='Username' required/>
+                <input type='text' id="username" name='username' onChange={handleInputChange} value={username} placeholder='Username' required/>
             </div>
 
             <div className="form-inputs">
                 <label htmlFor="password">Password</label>
-                <input type='password' id="loginPassword" name='password' onChange={handleInputChange} value={loginPassword} placeholder='Password' required/>
+                <input type='password' id="password" name='password' onChange={handleInputChange} value={password} placeholder='Password' required/>
             </div>
 
             <button type='submit' onClick={handleFormSubmit}>

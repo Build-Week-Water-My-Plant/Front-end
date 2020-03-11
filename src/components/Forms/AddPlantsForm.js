@@ -3,19 +3,18 @@ import { Form } from './Styles';
 
 
 const AddPlantsForm = props => {
-    const { showModal, toggleLoading, addPlant, currentUserID } = props;
-
-    const initialPlant = {
-        "species": '',
+    const { showModal, toggleLoading, addPlant } = props;
+    const userID = localStorage.getItem("userID")
+    const initialPlant = [{
+        "id": Date.now(),
         "name": '',
         "location": '',
-        "schedule": 0,
-        "user": {
-            "userid": parseInt(currentUserID)
-        }
-    }
+        "description": "",
+        "plantURL": "",
+        "userId": userID
+    }]
     const [ newPlant, setNewPlant] = useState(initialPlant);
-    const { species, name, location, schedule } = newPlant;
+    const {name, location, description, plantURL } = newPlant;
 
 
     // Handler Functions
@@ -27,10 +26,10 @@ const AddPlantsForm = props => {
     }
 
     const handleFormSubmit = (e) => {
-        if(species && name && location && schedule) {
+        if( name && location && description && plantURL) {
             e.preventDefault();
             toggleLoading(true);
-            addPlant({...newPlant, schedule: parseInt(newPlant.schedule)});
+            addPlant({...newPlant, userId: userID, schedule: parseInt(newPlant.schedule)});
             setNewPlant(initialPlant);
             showModal(e);
         }
@@ -46,11 +45,6 @@ const AddPlantsForm = props => {
             </div>
 
             <div className="form-inputs">
-                <label htmlFor="species">Specie</label>
-                <input type='text' id="species" name='species' onChange={handleInputChange} value={species} placeholder='Species' required/>
-            </div>
-
-            <div className="form-inputs">
                 <label htmlFor="plantname">Name</label>
                 <input type='text' id="name" name='plantname' onChange={handleInputChange} value={name} placeholder='Plant Name' required/>
             </div>
@@ -61,8 +55,13 @@ const AddPlantsForm = props => {
             </div>
 
             <div className="form-inputs">
-                <label htmlFor="schedule">Schedule</label>
-                <input type='number' id="schedule" name='schedule' onChange={handleInputChange} value={schedule} placeholder='Schedule' required/>
+                <label htmlFor="description">Description</label>
+                <input type='text' id="description" name='description' onChange={handleInputChange} value={description} placeholder='Description' required/>
+            </div>
+
+            <div className="form-inputs">
+                <label htmlFor="plantURL">Info: </label>
+                <input type='text' id="plantURL" name='plantURL' onChange={handleInputChange} value={plantURL} placeholder='plantURL'/>
             </div>
 
             <button type='submit' onClick={handleFormSubmit}>
