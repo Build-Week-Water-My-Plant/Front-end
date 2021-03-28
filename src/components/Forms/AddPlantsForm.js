@@ -46,7 +46,7 @@ const AddPlantsForm = props => {
             </div>
 
             <div className="form-inputs">
-                <label htmlFor="species">Specie</label>
+                <label htmlFor="species">Species</label>
                 <input type='text' id="species" name='species' onChange={handleInputChange} value={species} placeholder='Species' required/>
             </div>
 
@@ -61,7 +61,7 @@ const AddPlantsForm = props => {
             </div>
 
             <div className="form-inputs">
-                <label htmlFor="schedule">Schedule</label>
+                <label htmlFor="schedule">Water how many days a week?</label>
                 <input type='number' id="schedule" name='schedule' onChange={handleInputChange} value={schedule} placeholder='Schedule' required/>
             </div>
 
