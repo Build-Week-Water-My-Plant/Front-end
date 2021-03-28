@@ -64,7 +64,8 @@ const LoginForm = props => {
         <Form autoComplete="off">
             <div className="form-header">
                 <h1>Login</h1>
-                <p>Keep your plants alive</p>
+                <p>Keep your plants alive!</p>
+                <h1>Track all of your watering schedules in one spot.</h1>
             </div>
 
             <div className="form-inputs">
